@@ -1,9 +1,10 @@
 // we can even name this file with jsx ts or js doesn't matter
-import RestaurantCard from "./RestaurentCard";
+import RestaurantCard from "./RestaurantCard";
 // import resList from "../../utils/mockData";
 import { useState, useEffect } from "react";  //inbuilt react function mahnu shakto apan yala.
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../../utils/useOnlineStatus";
 const Body = () => {
     // var List = resList;       //this was only updating the console not UI
     // var list = resList;
@@ -21,6 +22,16 @@ const Body = () => {
         // console.log(jso  n?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
         setList(json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
         setfilterList(json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    }
+
+    const onlineStatus=useOnlineStatus();
+    if(onlineStatus===false)
+    {
+        return (
+            <h1>
+                Looks like u are offline buddy...Papa ko bolna wifi lagagye..
+            </h1>
+        )
     }
     //conditional Rendering..
     // console.log(List);
@@ -56,8 +67,8 @@ const Body = () => {
                 {
                     filteredList?.map((x) => (
                         <Link
-                            key={x.info.id} 
-                            to={"/restaurants/" + x.info.id}> 
+                            key={x.info.id}
+                            to={"/restaurants/" + x.info.id}>
                             <RestaurantCard resData={x} />
                         </Link>
                     ))

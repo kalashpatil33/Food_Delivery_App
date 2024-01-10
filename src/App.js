@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -7,8 +7,9 @@ import About from "./components/About";
 import ContactUS from "./components/ContactUS";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
+// import Grocery from "./components/Grocery";
 
-
+const Grocery = lazy(() => import("./components/Grocery"));
 const AppLayout = () => { //here we write all the components which all sections our page will be divided in...
     return (<div className="app">
         <Header />
@@ -34,11 +35,15 @@ const appRouter = createBrowserRouter([
                 element: <ContactUS />
             },
             {
+                path: "/grocery",
+                element: <Suspense fallback={<h1>Jab tak load honga tabtak mujhe dekh na...</h1>}><Grocery /></Suspense>
+            },
+            {
                 path: "/restaurants/:resId",
                 element: <RestaurantMenu />
             }
         ],
-        errorElement: <Error />,
+        errorElement: <Error/>,
     },
 ])
 const root = ReactDOM.createRoot(document.getElementById("root"));
