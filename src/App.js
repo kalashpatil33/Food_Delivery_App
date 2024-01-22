@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -7,16 +7,36 @@ import About from "./components/About";
 import ContactUS from "./components/ContactUS";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
+import UserContext from "../utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "../utils/appStore";
+import Cart from "./components/Cart";
 // import Grocery from "./components/Grocery";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 const AppLayout = () => { //here we write all the components which all sections our page will be divided in...
-    return (<div className="app">
-        <Header />
-        <Outlet />   {/**Wheneever there is a change in the path this outlet will be filled up with appropriate path */}
-    </div>)
-};
 
+    const [userName, setUserName] = useState();
+
+    useEffect(() => {
+        const data = {
+            name: "Aryan Patil"
+        }
+        setUserName(data.name);
+    }, [])
+    return (
+        <Provider store={appStore}>        <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+            <div className="app">
+                {/* <UserContext.Provider value={{ loggedInUser: "Kalash Patil" }}> */}
+                <Header />
+                {/* </UserContext.Provider> */}
+                <Outlet /> {/**Wheneever there is a change in the path this outlet will be filled up with appropriate path */}
+            </div>
+        </UserContext.Provider>
+        </Provider>
+
+    )
+};
 const appRouter = createBrowserRouter([
     {
         path: "/", //ha main path ani hyavarun children la pathaavta yeil..
@@ -41,9 +61,13 @@ const appRouter = createBrowserRouter([
             {
                 path: "/restaurants/:resId",
                 element: <RestaurantMenu />
+            },
+            {
+                path: "/cart",
+                element: <Cart />
             }
         ],
-        errorElement: <Error/>,
+        errorElement: <Error />,
     },
 ])
 const root = ReactDOM.createRoot(document.getElementById("root"));
