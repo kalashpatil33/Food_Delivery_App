@@ -1,7 +1,7 @@
-
 import { CDN_URL } from "../../utils/constants";
 const RestaurantCard = (props) => {
     const { resData } = props;
+    console.log(resData.info);
     const {
         name, cuisines, avgRating, sla, cloudinaryImageId
     } = resData?.info;     //optional chaining
@@ -22,10 +22,8 @@ const RestaurantCard = (props) => {
 
     )
 }
-
 // Higher order Component
 // input -RestaurantCard ===>>> RestaurantCardPromoted
-
 const withPromotedLabel = (RestaurantCard) => {
     return (props) => {
         return (
